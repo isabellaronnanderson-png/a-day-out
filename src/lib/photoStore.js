@@ -4,11 +4,11 @@
 // more naturally. Photos are resized/compressed client-side before storage
 // to keep things reasonable regardless.
 
+import { fileToCompressedDataUrl } from './imageUtils';
+
 const DB_NAME = 'dispatch-photos';
 const DB_VERSION = 1;
 const STORE = 'photos';
-const MAX_DIMENSION = 1000; // px, longest side
-const JPEG_QUALITY = 0.78;
 
 function openDb() {
   return new Promise((resolve, reject) => {
@@ -22,35 +22,6 @@ function openDb() {
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
-  });
-}
-
-// Resize/compress an image File down to a data URL before storage.
-function fileToCompressedDataUrl(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(reader.error);
-    reader.onload = () => {
-      const img = new Image();
-      img.onerror = () => reject(new Error('Could not read image'));
-      img.onload = () => {
-        let { width, height } = img;
-        if (width > height && width > MAX_DIMENSION) {
-          height = Math.round((height * MAX_DIMENSION) / width);
-          width = MAX_DIMENSION;
-        } else if (height > MAX_DIMENSION) {
-          width = Math.round((width * MAX_DIMENSION) / height);
-          height = MAX_DIMENSION;
-        }
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL('image/jpeg', JPEG_QUALITY));
-      };
-      img.src = reader.result;
-    };
-    reader.readAsDataURL(file);
   });
 }
 

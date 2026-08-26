@@ -15,7 +15,7 @@ export default function PlaceCard({ place, onToggleFavorite, onToggleVisited, on
   const openNow = hasHoursData(place) ? isOpenNow(place) : null;
 
   return (
-    <div className="place-card" style={{ '--accent': `var(${primaryMeta.cssVar})` }}>
+    <div className="place-card" style={{ '--accent-card': `var(${primaryMeta.cssVar})` }}>
       {closing && <div className="closing-pill">closing in {daysLeft}d</div>}
 
       <div className="place-card-top">

@@ -1,4 +1,4 @@
-# Dispatch
+# A Day Out
 
 A guide to the perfect day out — save places, tag them by when they fit into
 a day, and generate a plan that keeps things close together, inside budget,
@@ -66,11 +66,13 @@ vercel dev
 
 ## The header
 
-The masthead is a 4×2 grid of your own photos (`public/photos/header-1.jpg`
-through `header-8.jpg`), with a "Dispatch" title card overlaid on top of the
-two middle columns. To swap in different photos, just replace those 8 files
-with the same names (square-ish crops work best, 500×500px is plenty) — no
-code changes needed.
+The header is 4 full-bleed color fields, side by side. Click any field or
+drag a photo onto it to fill that slot — it replaces the color with your
+photo. Click the × that appears on hover to clear it back to the default
+color. Photos are stored in the browser's IndexedDB (same approach as place
+photos — see below) and persist across visits, so you can change the header
+whenever you like without touching any code. Nothing here needs a build or
+a redeploy; it's editable live in the running app.
 
 ## Opening hours, editing, and photos
 
