@@ -80,7 +80,7 @@ a { color: var(--accent-deep); }
 .field-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  height: clamp(260px, 30vw, 560px);
+  height: clamp(340px, 40vw, 720px);
 }
 
 .drop-field {
@@ -90,12 +90,24 @@ a { color: var(--accent-deep); }
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background-size: cover;
-  background-position: center;
   transition: filter 0.15s ease;
+  touch-action: none; /* let us handle drag/pan ourselves without the browser scrolling */
 }
 .drop-field.dragover { filter: brightness(1.12); }
-.drop-field img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.drop-field.has-photo { cursor: grab; }
+.drop-field.panning { cursor: grabbing; }
+
+.field-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none; /* the parent .drop-field handles all pointer/drag logic */
+  -webkit-user-drag: none;
+  user-select: none;
+}
 
 .drop-hint {
   display: flex;
@@ -183,7 +195,7 @@ a { color: var(--accent-deep); }
 .section-head h2 {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   letter-spacing: -0.01em;
   color: var(--ink);
 }
