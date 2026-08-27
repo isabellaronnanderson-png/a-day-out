@@ -197,7 +197,7 @@ export default function PlaceForm({ cities, defaultCity, place, onSave, onClose 
             </div>
           )}
 
-          <div className="field-row">
+          <div className="form-row">
             <div className="field">
               <label htmlFor="name">Name</label>
               <input

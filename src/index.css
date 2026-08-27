@@ -6,31 +6,31 @@
    ============================================================ */
 
 :root {
-  --black-olive: #42423a;
-  --asparagus: #769365;
-  --columbia-blue: #c6d6e5;
-  --air-blue: #749ab2;
-  --english-violet: #5d4c68;
+  --deep-blue: #2e4258;
+  --asparagus: #8fb37e;
+  --columbia-blue: #cde3f3;
+  --air-blue: #a7cbdd;
+  --english-violet: #ae9bbd;
 
   --bg: #ffffff;
   --surface: #ffffff;
-  --surface-sunk: #f4f3ee;
-  --ink: var(--black-olive);
-  --ink-soft: #83836f;
-  --line: #e6e4da;
-  --line-strong: #cfccbf;
+  --surface-sunk: #f2f5f7;
+  --ink: var(--deep-blue);
+  --ink-soft: #7a8b9c;
+  --line: #e4e9ee;
+  --line-strong: #c7d0d9;
 
   --accent: var(--asparagus);
-  --accent-deep: #5f7a52;
+  --accent-deep: #6f9863;
 
   /* category colors — each of the five palette colors maps to one tag */
   --mustard: var(--asparagus);       /* breakfast */
   --teal: var(--columbia-blue);      /* activity, day */
   --navy: var(--english-violet);     /* activity, night */
-  --terracotta: var(--black-olive);  /* dinner */
+  --terracotta: var(--deep-blue);    /* dinner */
   --plum: var(--air-blue);           /* drinks */
 
-  --font-display: 'Unbounded', sans-serif;     /* wordmark, buttons, tabs, headings */
+  --font-display: 'Space Grotesk', sans-serif;  /* wordmark, buttons, tabs, headings */
   --font-serif: 'Bodoni Moda', Georgia, serif; /* place names, editorial accents */
   --font-body: 'Work Sans', -apple-system, sans-serif;
   --font-mono: 'Space Mono', ui-monospace, monospace;
@@ -133,35 +133,30 @@ a { color: var(--accent-deep); }
    Masthead bar — title left, tabs right, below the header
    ------------------------------------------------------------ */
 
-.masthead-bar {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 28px 0 30px;
-  border-bottom: 2px solid var(--ink);
+.masthead-title-row {
+  padding: 16px 0 4px;
 }
 
 .masthead-title {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(1.8rem, 4.2vw, 3.1rem);
-  letter-spacing: -0.01em;
-  line-height: 0.95;
+  font-size: 1.25rem;
+  letter-spacing: 0.01em;
   margin: 0;
 }
 
 .tab-row {
   display: flex;
-  gap: 22px;
+  gap: 26px;
+  justify-content: center;
+  margin: 20px 0 14px;
   flex-wrap: wrap;
 }
 
 .tab-stub {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   letter-spacing: 0.01em;
   background: none;
   border: none;
@@ -257,10 +252,10 @@ a { color: var(--accent-deep); }
 .field input:focus, .field select:focus, .field textarea:focus {
   outline: none;
   border-color: var(--ink);
-  box-shadow: 0 0 0 3px rgba(118, 147, 101, 0.22);
+  box-shadow: 0 0 0 3px rgba(143, 179, 126, 0.32);
 }
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-@media (max-width: 520px) { .field-row { grid-template-columns: 1fr; } }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
 
 .cat-toggle-row {
   display: flex;
@@ -386,7 +381,7 @@ a { color: var(--accent-deep); }
   transition: box-shadow 0.15s ease;
 }
 .place-card:hover {
-  box-shadow: 0 8px 20px rgba(66, 66, 58, 0.1);
+  box-shadow: 0 8px 20px rgba(46, 66, 88, 0.1);
 }
 
 .place-card-top {
@@ -644,7 +639,7 @@ a { color: var(--accent-deep); }
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(66, 66, 58, 0.4);
+  background: rgba(46, 66, 88, 0.4);
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -659,7 +654,7 @@ a { color: var(--accent-deep); }
   padding: 26px;
   width: 100%;
   max-width: 520px;
-  box-shadow: 0 24px 50px rgba(66, 66, 58, 0.2);
+  box-shadow: 0 24px 50px rgba(46, 66, 88, 0.2);
 }
 
 .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
@@ -678,7 +673,7 @@ a { color: var(--accent-deep); }
   max-height: 220px;
   overflow-y: auto;
   z-index: 10;
-  box-shadow: 0 8px 20px rgba(66, 66, 58, 0.15);
+  box-shadow: 0 8px 20px rgba(46, 66, 88, 0.15);
 }
 .autocomplete-item { padding: 10px 12px; font-size: 0.88rem; border-bottom: 1px solid var(--line); }
 .autocomplete-item:last-child { border-bottom: none; }

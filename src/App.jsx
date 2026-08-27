@@ -52,17 +52,17 @@ export default function App() {
           <HeaderFieldRow />
         </div>
 
-        <div className="masthead-bar">
+        <div className="masthead-title-row">
           <h1 className="masthead-title">A day out</h1>
-          <nav className="tab-row">
-            <button className={`tab-stub ${tab === 'plan' ? 'active' : ''}`} onClick={() => setTab('plan')}>
-              Plan a day
-            </button>
-            <button className={`tab-stub ${tab === 'saved' ? 'active' : ''}`} onClick={() => setTab('saved')}>
-              Saved places
-            </button>
-          </nav>
         </div>
+        <nav className="tab-row">
+          <button className={`tab-stub ${tab === 'plan' ? 'active' : ''}`} onClick={() => setTab('plan')}>
+            Plan a day
+          </button>
+          <button className={`tab-stub ${tab === 'saved' ? 'active' : ''}`} onClick={() => setTab('saved')}>
+            Saved places
+          </button>
+        </nav>
       </header>
 
       <main>

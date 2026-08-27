@@ -4,11 +4,13 @@ import { getHeaderPhotos, setHeaderPhoto, clearHeaderPhoto } from '../lib/header
 // Default colors shown before a photo is dropped into that slot — four of
 // the five palette colors (skipping air-blue, which sits too close to
 // columbia-blue to read as a distinct field).
-const DEFAULT_COLORS = ['#42423a', '#769365', '#c6d6e5', '#5d4c68'];
+const DEFAULT_COLORS = ['#2e4258', '#8fb37e', '#cde3f3', '#ae9bbd'];
+// The pale fields need dark hint text/icons instead of white for contrast.
+const HINT_COLORS = ['rgba(255,255,255,0.85)', 'rgba(255,255,255,0.85)', 'rgba(46,66,88,0.55)', 'rgba(46,66,88,0.55)'];
 
 function DropIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.6">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
       <rect x="3" y="3" width="18" height="18" rx="2" />
       <circle cx="8.5" cy="8.5" r="1.5" />
       <path d="M21 15l-5-5L5 21" />
@@ -16,7 +18,7 @@ function DropIcon() {
   );
 }
 
-function Field({ slot, color, photo, onSetPhoto, onClearPhoto }) {
+function Field({ slot, color, hintColor, photo, onSetPhoto, onClearPhoto }) {
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef(null);
 
@@ -46,7 +48,7 @@ function Field({ slot, color, photo, onSetPhoto, onClearPhoto }) {
         onChange={(e) => handleFiles(e.target.files)}
       />
       {!photo && (
-        <div className="drop-hint">
+        <div className="drop-hint" style={{ color: hintColor }}>
           <DropIcon />
           drop a photo
         </div>
@@ -97,6 +99,7 @@ export default function HeaderFieldRow() {
           key={i}
           slot={i}
           color={color}
+          hintColor={HINT_COLORS[i]}
           photo={photos[i]}
           onSetPhoto={handleSetPhoto}
           onClearPhoto={handleClearPhoto}

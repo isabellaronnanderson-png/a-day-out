@@ -39,7 +39,7 @@ export default function PlanTab({ places, cities }) {
       </div>
 
       <div className="panel stack">
-        <div className="field-row">
+        <div className="form-row">
           <div className="field">
             <label htmlFor="planCity">City</label>
             {cities.length > 0 ? (
@@ -62,7 +62,7 @@ export default function PlanTab({ places, cities }) {
           </div>
         </div>
 
-        <div className="field-row">
+        <div className="form-row">
           <div className="field">
             <label>Mood</label>
             <div className="toggle-pair">
