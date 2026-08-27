@@ -80,7 +80,7 @@ a { color: var(--accent-deep); }
 .field-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  height: clamp(340px, 40vw, 720px);
+  height: clamp(300px, 34vw, 620px);
 }
 
 .drop-field {
