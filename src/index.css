@@ -288,6 +288,61 @@ a { color: var(--accent-deep); }
 }
 .cat-toggle.active {
   background: var(--pill-color);
+  color: var(--kicker-text, #fff);
+}
+
+/* ------------------------------------------------------------
+   Saved-places filter panel — pills, multi-select per group
+   ------------------------------------------------------------ */
+
+.filter-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.filter-group label {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.filter-pill {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  padding: 8px 14px;
+  border: 1.5px solid var(--ink);
+  background: var(--surface);
+  color: var(--ink);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.filter-pill.active {
+  background: var(--ink);
+  color: #fff;
+}
+
+.tag-toggle {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 7px 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-sunk);
+  color: var(--ink-soft);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.tag-toggle.active {
+  background: var(--accent);
+  border-color: var(--accent);
   color: #fff;
 }
 

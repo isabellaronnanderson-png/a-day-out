@@ -241,7 +241,7 @@ export default function PlaceForm({ cities, defaultCity, place, onSave, onClose 
                   key={c.value}
                   type="button"
                   className={`cat-toggle ${form.categories.includes(c.value) ? 'active' : ''}`}
-                  style={{ '--pill-color': `var(${c.cssVar})` }}
+                  style={{ '--pill-color': `var(${c.cssVar})`, '--kicker-text': c.textColor }}
                   onClick={() => toggleCategory(c.value)}
                 >
                   {c.label}

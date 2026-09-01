@@ -4,25 +4,32 @@ import PlaceForm from '../components/PlaceForm';
 import { CATEGORIES } from '../lib/categories';
 import { getAllTags } from '../lib/storage';
 
+function toggleInSet(set, value) {
+  const next = new Set(set);
+  if (next.has(value)) next.delete(value);
+  else next.add(value);
+  return next;
+}
+
 export default function SavedPlacesTab({ places, cities, onAdd, onUpdate, onToggleFavorite, onToggleVisited, onDelete }) {
   const [showForm, setShowForm] = useState(false);
   const [editingPlace, setEditingPlace] = useState(null);
-  const [cityFilter, setCityFilter] = useState('all');
-  const [categoryFilter, setCategoryFilter] = useState('all');
-  const [tagFilter, setTagFilter] = useState('all');
+  const [cityFilters, setCityFilters] = useState(new Set());
+  const [categoryFilters, setCategoryFilters] = useState(new Set());
+  const [tagFilters, setTagFilters] = useState(new Set());
   const [favoritesOnly, setFavoritesOnly] = useState(false);
 
   const allTags = useMemo(() => getAllTags(), [places]);
 
   const filtered = useMemo(() => {
     return places.filter((p) => {
-      if (cityFilter !== 'all' && p.city !== cityFilter) return false;
-      if (categoryFilter !== 'all' && !(p.categories || []).includes(categoryFilter)) return false;
-      if (tagFilter !== 'all' && !(p.tags || []).includes(tagFilter)) return false;
+      if (cityFilters.size > 0 && !cityFilters.has(p.city)) return false;
+      if (categoryFilters.size > 0 && !(p.categories || []).some((c) => categoryFilters.has(c))) return false;
+      if (tagFilters.size > 0 && !(p.tags || []).some((t) => tagFilters.has(t))) return false;
       if (favoritesOnly && !p.favorite) return false;
       return true;
     });
-  }, [places, cityFilter, categoryFilter, tagFilter, favoritesOnly]);
+  }, [places, cityFilters, categoryFilters, tagFilters, favoritesOnly]);
 
   const formOpen = showForm || editingPlace != null;
 
@@ -30,6 +37,8 @@ export default function SavedPlacesTab({ places, cities, onAdd, onUpdate, onTogg
     setShowForm(false);
     setEditingPlace(null);
   }
+
+  const singleCity = cityFilters.size === 1 ? [...cityFilters][0] : '';
 
   return (
     <div>
@@ -41,34 +50,60 @@ export default function SavedPlacesTab({ places, cities, onAdd, onUpdate, onTogg
         <button className="btn btn-primary" onClick={() => setShowForm(true)}>+ Add a place</button>
       </div>
 
-      <div className="panel" style={{ marginBottom: 22, display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'flex-end' }}>
-        <div className="field">
-          <label htmlFor="cityFilter">City</label>
-          <select id="cityFilter" value={cityFilter} onChange={(e) => setCityFilter(e.target.value)}>
-            <option value="all">All cities</option>
-            {cities.map((c) => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
-        </div>
-        <div className="field">
-          <label htmlFor="catFilter">Category</label>
-          <select id="catFilter" value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
-            <option value="all">All categories</option>
+      <div className="panel filter-panel">
+        {cities.length > 0 && (
+          <div className="filter-group">
+            <label>City</label>
+            <div className="cat-toggle-row">
+              {cities.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  className={`filter-pill ${cityFilters.has(c) ? 'active' : ''}`}
+                  onClick={() => setCityFilters((s) => toggleInSet(s, c))}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="filter-group">
+          <label>Category</label>
+          <div className="cat-toggle-row">
             {CATEGORIES.map((c) => (
-              <option key={c.value} value={c.value}>{c.label}</option>
+              <button
+                key={c.value}
+                type="button"
+                className={`cat-toggle ${categoryFilters.has(c.value) ? 'active' : ''}`}
+                style={{ '--pill-color': `var(${c.cssVar})`, '--kicker-text': c.textColor }}
+                onClick={() => setCategoryFilters((s) => toggleInSet(s, c.value))}
+              >
+                {c.label}
+              </button>
             ))}
-          </select>
+          </div>
         </div>
-        <div className="field">
-          <label htmlFor="tagFilter">Tag</label>
-          <select id="tagFilter" value={tagFilter} onChange={(e) => setTagFilter(e.target.value)}>
-            <option value="all">All tags</option>
-            {allTags.map((t) => (
-              <option key={t} value={t}>#{t}</option>
-            ))}
-          </select>
-        </div>
+
+        {allTags.length > 0 && (
+          <div className="filter-group">
+            <label>Tag</label>
+            <div className="cat-toggle-row">
+              {allTags.map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  className={`tag-toggle ${tagFilters.has(t) ? 'active' : ''}`}
+                  onClick={() => setTagFilters((s) => toggleInSet(s, t))}
+                >
+                  #{t}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <button
           className={`btn btn-sm ${favoritesOnly ? '' : 'btn-ghost'}`}
           onClick={() => setFavoritesOnly((v) => !v)}
@@ -92,7 +127,7 @@ export default function SavedPlacesTab({ places, cities, onAdd, onUpdate, onTogg
               onToggleVisited={onToggleVisited}
               onDelete={onDelete}
               onEdit={() => setEditingPlace(p)}
-              onTagClick={(t) => setTagFilter(t)}
+              onTagClick={(t) => setTagFilters((s) => toggleInSet(s, t))}
             />
           ))}
         </div>
@@ -101,7 +136,7 @@ export default function SavedPlacesTab({ places, cities, onAdd, onUpdate, onTogg
       {formOpen && (
         <PlaceForm
           cities={cities}
-          defaultCity={cityFilter !== 'all' ? cityFilter : ''}
+          defaultCity={singleCity}
           place={editingPlace}
           onClose={closeForm}
           onSave={(payload) => (payload.id ? onUpdate(payload.id, payload) : onAdd(payload))}
