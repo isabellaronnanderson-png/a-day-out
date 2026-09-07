@@ -6,7 +6,7 @@ import AuthScreen from './components/AuthScreen';
 import CheckEmailScreen from './components/CheckEmailScreen';
 import BackupMenu from './components/BackupMenu';
 import AccountBadge from './components/AccountBadge';
-import { supabase } from './lib/supabaseClient';
+import { supabase, supabaseConfigured } from './lib/supabaseClient';
 import { getPlaces, addPlace, updatePlace, deletePlace, replaceAllPlaces, getCities } from './lib/storage';
 import { deleteAllPhotosForPlace } from './lib/photoStore';
 import { syncOnLogin, upsertCloudPlace, deleteCloudPlace } from './lib/cloudSync';
@@ -119,10 +119,25 @@ export default function App() {
 
   const cities = getCities();
 
+  if (!supabaseConfigured) {
+    return (
+      <div className="auth-shell">
+        <div className="auth-card">
+          <h1 className="auth-title">Configuration needed</h1>
+          <p className="auth-subtitle">
+            This deployment is missing <code>VITE_SUPABASE_URL</code> and/or{' '}
+            <code>VITE_SUPABASE_ANON_KEY</code>. Add both in your Vercel
+            project's Settings → Environment Variables, then redeploy.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (authStatus === 'loading') {
     return (
       <div className="auth-shell">
-        <p className="auth-subtitle">Loading\u2026</p>
+        <p className="auth-subtitle">Loading…</p>
       </div>
     );
   }
