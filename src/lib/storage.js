@@ -69,6 +69,12 @@ export function deletePlace(id) {
   writeAll(readAll().filter((p) => p.id !== id));
 }
 
+// Wholesale-replaces the local cache — used when merging in cloud data
+// right after sign-in, and when restoring from a backup file.
+export function replaceAllPlaces(places) {
+  writeAll(Array.isArray(places) ? places : []);
+}
+
 export function getCities() {
   const cities = new Set(readAll().map((p) => p.city).filter(Boolean));
   return Array.from(cities).sort();

@@ -147,6 +147,17 @@ a { color: var(--accent-deep); }
 
 .masthead-title-row {
   padding: 16px 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.masthead-account-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
 .masthead-title {
@@ -748,3 +759,137 @@ a { color: var(--accent-deep); }
 
 .hint { font-size: 0.76rem; color: var(--ink-soft); }
 .ticket-actions { display: flex; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+
+/* ------------------------------------------------------------
+   Auth screens (sign in / sign up / check-your-email)
+   ------------------------------------------------------------ */
+
+.auth-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--bg);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 36px 32px;
+  text-align: center;
+}
+
+.auth-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+  color: var(--accent);
+}
+
+.auth-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.6rem;
+  letter-spacing: 0.01em;
+  margin: 0 0 8px;
+}
+
+.auth-subtitle {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin: 0 0 22px;
+}
+
+.auth-card .stack { text-align: left; }
+
+.auth-error {
+  font-size: 0.82rem;
+  color: #a83a3a;
+  background: #fbeeee;
+  padding: 10px 12px;
+  border: 1px solid #e4bcbc;
+}
+
+.auth-card .btn-primary {
+  width: 100%;
+}
+
+.auth-switch {
+  display: block;
+  width: 100%;
+  margin-top: 18px;
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.auth-switch:hover { color: var(--ink); }
+
+/* ------------------------------------------------------------
+   Backup menu
+   ------------------------------------------------------------ */
+
+.backup-menu {
+  position: relative;
+}
+
+.backup-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+.backup-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 20px rgba(46, 66, 88, 0.15);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  min-width: 170px;
+}
+
+.backup-menu-dropdown button {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 11px 14px;
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+.backup-menu-dropdown button:hover { background: var(--surface-sunk); }
+.backup-menu-dropdown button + button { border-top: 1px solid var(--line); }
+
+/* ------------------------------------------------------------
+   Account badge
+   ------------------------------------------------------------ */
+
+.account-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.account-avatar {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.82rem;
+}

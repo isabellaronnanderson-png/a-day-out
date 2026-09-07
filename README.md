@@ -112,37 +112,83 @@ Add more cities to that list as you need them; each entry is just
 1. Push this repo to GitHub.
 2. Import it into [Vercel](https://vercel.com/new). It auto-detects Vite and
    the `api/` folder as serverless functions — no config needed.
-3. In the Vercel project settings, add an environment variable:
-   `GOOGLE_PLACES_API_KEY` = your key.
-4. Deploy. Place search will work in production once the key is set; the
-   app itself works with or without it.
+3. In the Vercel project settings, add environment variables:
+   `GOOGLE_PLACES_API_KEY` = your key, plus `VITE_SUPABASE_URL` and
+   `VITE_SUPABASE_ANON_KEY` (see "Cloud storage, login, and backup" below —
+   required for login/sync to work on the deployed site).
+4. Deploy, then go back to Supabase's Auth settings and set the Site URL to
+   your new Vercel URL (see below) so confirmation emails link back correctly.
 
-## Upgrading persistence (optional, later)
+## Cloud storage, login, and backup
 
-Right now everything lives in `src/lib/storage.js`, which reads/writes a
-single `localStorage` key. If you later want plans and places to sync across
-devices, swap that file for calls to a hosted database (Supabase's free tier
-is a natural fit for a project this size) — nothing else in the app needs to
-change, since every component only talks to `getPlaces` / `addPlace` /
-`updatePlace` / `deletePlace`.
+The app is now gated behind email/password login (Supabase Auth), and your
+places sync to a Supabase table so they follow you across devices —
+localStorage stays as a fast local cache, but the cloud is the source of
+truth once you're signed in.
+
+**One-time setup, before this works:**
+
+1. **Run the schema.** In your Supabase project's SQL Editor, run the
+   contents of `supabase/schema.sql` in this repo. It creates a
+   `day_out_places` table (named specifically for this app, since you're
+   reusing a Supabase project shared with other projects) with row-level
+   security so each account only ever sees its own rows.
+2. **Set the Site URL.** In Supabase → Authentication → URL Configuration,
+   set the Site URL to your actual deployed URL (e.g.
+   `https://your-app.vercel.app`) once you know it. This is what the
+   confirmation-email link points back to — if it's left as `localhost`,
+   the link in the confirmation email won't return to your live site.
+3. **Add environment variables.** Locally, a `.env` file with your
+   credentials is already included (see `.env.example` for the format).
+   In Vercel's project settings, add the same two variables:
+   `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. The anon/publishable
+   key is safe to expose client-side — it's designed for this, and access
+   control happens via the row-level security policies in the schema, not
+   by keeping this key secret.
+
+**How sign-up works:** creating an account shows a dedicated "check your
+email" screen rather than logging you straight in — Supabase requires
+clicking the confirmation link first (unless you've turned that off in
+your project's Auth settings), then you come back and sign in normally.
+
+**First login on a device that already had local data:** anything sitting
+in localStorage that isn't in the cloud yet gets pushed up automatically,
+rather than overwritten — see `syncOnLogin` in `src/lib/cloudSync.js` if
+you want the exact logic.
+
+**Backup / restore:** the "Backup" button in the header can export all your
+places as a JSON file, or restore from a previously exported one (this
+replaces your current data, with a confirmation prompt first, and re-syncs
+the restored set to the cloud). Note that this backs up place *data*
+(names, notes, tags, etc.) — not the header photos or per-place photo
+galleries, since those are larger binary images stored in IndexedDB rather
+than the lightweight JSON this export is meant for.
 
 ## Project structure
 
 ```
 src/
   lib/
-    storage.js        localStorage CRUD for places
+    storage.js        localStorage cache for places
+    cloudSync.js       Supabase sync (mapping, fetch/upsert/delete, first-login merge)
+    supabaseClient.js  Supabase client setup
     geo.js             haversine distance helper
     planGenerator.js   the day-plan suggestion algorithm
     placesApi.js        client for /api/places
     categories.js       category labels + stamp colors
   components/
+    AuthScreen.jsx        sign in / sign up
+    CheckEmailScreen.jsx  post-signup confirmation screen
+    BackupMenu.jsx         download/restore JSON backup
+    AccountBadge.jsx       avatar + sign out
     PlaceCard.jsx        the "ticket stub" place display
     PlaceForm.jsx         add-place modal with Places search
     CategoryStamp.jsx     small category badge
   pages/
     SavedPlacesTab.jsx
     PlanTab.jsx
+supabase/
+  schema.sql          run this in the Supabase SQL Editor once
 api/
   places.js            serverless proxy to Google Places API (New)
 ```
