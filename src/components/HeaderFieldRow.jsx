@@ -45,6 +45,7 @@ function Field({ slot, color, hintColor, photo, onSetPhoto, onSetPosition, onCle
 
   function handlePointerDown(e) {
     if (!photo) return; // no photo yet — plain click opens the file picker instead
+    if (e.target.closest('.field-clear')) return; // let the clear button handle its own click normally
     const rect = fieldRef.current.getBoundingClientRect();
     dragState.current = {
       startX: e.clientX,
